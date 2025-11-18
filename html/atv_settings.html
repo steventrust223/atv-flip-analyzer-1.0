@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      font-size: 13px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      color: #666;
+      font-size: 12px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 12px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #2196F3;
+    }
+
+    .hint {
+      font-size: 10px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .row .form-group {
+      flex: 1;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding-top: 16px;
+      border-top: 1px solid #eee;
+      margin-top: 16px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #2196F3;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1976D2;
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #f0f0f0;
+      border-top: 3px solid #2196F3;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-message {
+      background: #E8F5E9;
+      color: #2E7D32;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .error-message {
+      background: #FFEBEE;
+      color: #C62828;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>⚙️ Settings</h1>
+    <p>Configure analyzer thresholds and preferences</p>
+  </div>
+
+  <div id="message-container"></div>
+
+  <form id="settings-form" style="display: none;">
+    <div class="section">
+      <h3 class="section-title">MAO Percentages</h3>
+      <p class="hint" style="margin-bottom: 12px;">Maximum offer as percentage of estimated retail value</p>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="MAO_PCT_RUNNER">Runners (%)</label>
+          <input type="number" id="MAO_PCT_RUNNER" name="MAO_PCT_RUNNER" min="0" max="100" step="1">
+          <div class="hint">For running units</div>
+        </div>
+        <div class="form-group">
+          <label for="MAO_PCT_PROJECT">Projects (%)</label>
+          <input type="number" id="MAO_PCT_PROJECT" name="MAO_PCT_PROJECT" min="0" max="100" step="1">
+          <div class="hint">For non-running</div>
+        </div>
+        <div class="form-group">
+          <label for="MAO_PCT_FRAME">Frames (%)</label>
+          <input type="number" id="MAO_PCT_FRAME" name="MAO_PCT_FRAME" min="0" max="100" step="1">
+          <div class="hint">For rollers/frames</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">Profit Targets</h3>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="MIN_PROFIT_AMOUNT">Min Profit ($)</label>
+          <input type="number" id="MIN_PROFIT_AMOUNT" name="MIN_PROFIT_AMOUNT" min="0" step="50">
+        </div>
+        <div class="form-group">
+          <label for="MIN_PROFIT_MARGIN">Min Margin (%)</label>
+          <input type="number" id="MIN_PROFIT_MARGIN" name="MIN_PROFIT_MARGIN" min="0" max="100" step="1">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="NEGOTIATION_CUSHION_PCT">Negotiation Cushion (%)</label>
+        <input type="number" id="NEGOTIATION_CUSHION_PCT" name="NEGOTIATION_CUSHION_PCT" min="0" max="50" step="1">
+        <div class="hint">Subtract from MAO for initial offer</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">Capital Tiers</h3>
+      <p class="hint" style="margin-bottom: 12px;">Maximum all-in cost for each tier</p>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="TIER_T1_MAX">T1 Micro Max ($)</label>
+          <input type="number" id="TIER_T1_MAX" name="TIER_T1_MAX" min="0" step="100">
+        </div>
+        <div class="form-group">
+          <label for="TIER_T2_MAX">T2 Budget Max ($)</label>
+          <input type="number" id="TIER_T2_MAX" name="TIER_T2_MAX" min="0" step="100">
+        </div>
+        <div class="form-group">
+          <label for="TIER_T3_MAX">T3 Mid Max ($)</label>
+          <input type="number" id="TIER_T3_MAX" name="TIER_T3_MAX" min="0" step="100">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">Deal Classification</h3>
+      <p class="hint" style="margin-bottom: 12px;">Minimum deal score for each class</p>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="DEAL_HOT_MIN">HOT Min</label>
+          <input type="number" id="DEAL_HOT_MIN" name="DEAL_HOT_MIN" min="0" max="100">
+        </div>
+        <div class="form-group">
+          <label for="DEAL_SOLID_MIN">SOLID Min</label>
+          <input type="number" id="DEAL_SOLID_MIN" name="DEAL_SOLID_MIN" min="0" max="100">
+        </div>
+        <div class="form-group">
+          <label for="DEAL_MARGINAL_MIN">MARGINAL Min</label>
+          <input type="number" id="DEAL_MARGINAL_MIN" name="DEAL_MARGINAL_MIN" min="0" max="100">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3 class="section-title">Distance Thresholds (miles)</h3>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="DISTANCE_LOCAL">Local</label>
+          <input type="number" id="DISTANCE_LOCAL" name="DISTANCE_LOCAL" min="0">
+        </div>
+        <div class="form-group">
+          <label for="DISTANCE_REGIONAL">Regional</label>
+          <input type="number" id="DISTANCE_REGIONAL" name="DISTANCE_REGIONAL" min="0">
+        </div>
+        <div class="form-group">
+          <label for="DISTANCE_FAR">Far</label>
+          <input type="number" id="DISTANCE_FAR" name="DISTANCE_FAR" min="0">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="USER_ZIP">Your ZIP Code</label>
+        <input type="text" id="USER_ZIP" name="USER_ZIP" maxlength="10">
+        <div class="hint">For distance calculations</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" onclick="google.script.host.close()">Cancel</button>
+      <button type="submit" class="btn btn-primary" id="save-btn">Save Settings</button>
+    </div>
+  </form>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Loading settings...</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', loadSettings);
+
+    function loadSettings() {
+      google.script.run
+        .withSuccessHandler(populateForm)
+        .withFailureHandler(showError)
+        .ATV_getSettingsForUi();
+    }
+
+    function populateForm(settings) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('settings-form').style.display = 'block';
+
+      // Populate form fields
+      const fields = [
+        'MAO_PCT_RUNNER', 'MAO_PCT_PROJECT', 'MAO_PCT_FRAME',
+        'MIN_PROFIT_AMOUNT', 'MIN_PROFIT_MARGIN', 'NEGOTIATION_CUSHION_PCT',
+        'TIER_T1_MAX', 'TIER_T2_MAX', 'TIER_T3_MAX',
+        'DEAL_HOT_MIN', 'DEAL_SOLID_MIN', 'DEAL_MARGINAL_MIN',
+        'DISTANCE_LOCAL', 'DISTANCE_REGIONAL', 'DISTANCE_FAR',
+        'USER_ZIP'
+      ];
+
+      fields.forEach(field => {
+        const input = document.getElementById(field);
+        if (input && settings[field] !== undefined) {
+          // Convert decimals to percentages for display
+          if (['MAO_PCT_RUNNER', 'MAO_PCT_PROJECT', 'MAO_PCT_FRAME', 'MIN_PROFIT_MARGIN', 'NEGOTIATION_CUSHION_PCT'].includes(field)) {
+            input.value = Math.round(settings[field] * 100);
+          } else {
+            input.value = settings[field];
+          }
+        }
+      });
+    }
+
+    function showError(error) {
+      document.getElementById('loading').innerHTML =
+        '<div class="error-message">Error loading settings: ' + error.message + '</div>';
+    }
+
+    document.getElementById('settings-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('save-btn');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      // Collect form data
+      const formData = {};
+      const inputs = this.querySelectorAll('input');
+
+      inputs.forEach(input => {
+        let value = input.value;
+
+        // Convert percentages back to decimals
+        if (['MAO_PCT_RUNNER', 'MAO_PCT_PROJECT', 'MAO_PCT_FRAME', 'MIN_PROFIT_MARGIN', 'NEGOTIATION_CUSHION_PCT'].includes(input.name)) {
+          value = parseFloat(value) / 100;
+        } else if (input.type === 'number') {
+          value = parseFloat(value);
+        }
+
+        formData[input.name] = value;
+      });
+
+      google.script.run
+        .withSuccessHandler(function(result) {
+          btn.disabled = false;
+          btn.textContent = 'Save Settings';
+
+          if (result.success) {
+            document.getElementById('message-container').innerHTML =
+              '<div class="success-message">Settings saved successfully!</div>';
+            setTimeout(() => {
+              document.getElementById('message-container').innerHTML = '';
+            }, 3000);
+          } else {
+            document.getElementById('message-container').innerHTML =
+              '<div class="error-message">Error: ' + result.message + '</div>';
+          }
+        })
+        .withFailureHandler(function(err) {
+          btn.disabled = false;
+          btn.textContent = 'Save Settings';
+          document.getElementById('message-container').innerHTML =
+            '<div class="error-message">Error: ' + err.message + '</div>';
+        })
+        .ATV_handleSettingsSubmit(formData);
+    });
+  </script>
+</body>
+</html>

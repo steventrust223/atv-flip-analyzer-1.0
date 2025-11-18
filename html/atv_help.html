@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #f5f5f5;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #2196F3;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 22px;
+      color: #333;
+    }
+
+    .header p {
+      margin: 8px 0 0;
+      color: #666;
+      font-size: 13px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .section h2 {
+      font-size: 15px;
+      color: #333;
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .section h3 {
+      font-size: 13px;
+      color: #555;
+      margin: 12px 0 8px;
+    }
+
+    p {
+      margin: 0 0 10px;
+      color: #555;
+    }
+
+    ul {
+      margin: 0 0 10px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      color: #555;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .step-number {
+      background: #2196F3;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content strong {
+      color: #333;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .badge-hot {
+      background: #FF6B6B;
+      color: white;
+    }
+
+    .badge-solid {
+      background: #4ECDC4;
+      color: white;
+    }
+
+    .badge-marginal {
+      background: #FFE66D;
+      color: #333;
+    }
+
+    .badge-pass {
+      background: #95A5A6;
+      color: white;
+    }
+
+    .tip {
+      background: #E3F2FD;
+      border-left: 3px solid #2196F3;
+      padding: 10px 12px;
+      margin: 12px 0;
+      font-size: 12px;
+    }
+
+    .tip strong {
+      color: #1976D2;
+    }
+
+    .formula {
+      background: #f5f5f5;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 11px;
+      margin: 8px 0;
+    }
+
+    .close-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+
+    .close-btn:hover {
+      background: #1976D2;
+    }
+
+    .emoji {
+      font-size: 16px;
+      margin-right: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📚 Quantum ATV Analyzer</h1>
+    <p>Quick Start Guide & Reference</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">🚀</span>Getting Started</h2>
+
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <strong>Setup Structure</strong><br>
+        Run <em>🔧 Setup / Refresh Structure</em> from the menu to create all required sheets with proper formatting.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <strong>Import Listings</strong><br>
+        Paste scraped data into <code>IMPORT_FB_ATV</code>, <code>IMPORT_CL_ATV</code>, or other import sheets. Use Browse.AI or manual copy/paste.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <strong>Run Full Analysis</strong><br>
+        Click <em>📊 Run Full Analysis</em> to normalize data, score conditions, calculate MAO, and rank deals.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <strong>Review Verdict</strong><br>
+        Check the <code>ATV_VERDICT</code> sheet to see ranked deals with recommended actions.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">📊</span>Understanding Deal Classes</h2>
+
+    <p><span class="badge badge-hot">HOT</span> <strong>High margin, manageable risk</strong><br>
+    These are the best opportunities. High profit potential with acceptable risk. Action: Move fast!</p>
+
+    <p><span class="badge badge-solid">SOLID</span> <strong>Good deal, standard risk</strong><br>
+    Profitable deals worth pursuing. May require more negotiation or work. Action: Pursue actively.</p>
+
+    <p><span class="badge badge-marginal">MARGINAL</span> <strong>OK deal or good deal with high risk</strong><br>
+    Could be profitable but has concerns. Action: Monitor or negotiate harder.</p>
+
+    <p><span class="badge badge-pass">PASS</span> <strong>Not worth pursuing</strong><br>
+    Poor profit potential, too risky, or overpriced. Action: Skip unless situation changes.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">💰</span>MAO Calculation</h2>
+
+    <p>The Maximum Allowable Offer (MAO) is calculated based on:</p>
+
+    <div class="formula">
+      MAO = (Retail Value × Offer %) - Repair Costs - Minimum Profit
+    </div>
+
+    <h3>Offer Percentages (default)</h3>
+    <ul>
+      <li><strong>Runners:</strong> 65% of retail value</li>
+      <li><strong>Projects:</strong> 45% of retail value</li>
+      <li><strong>Frames/Rollers:</strong> 25% of retail value</li>
+    </ul>
+
+    <p>The <strong>Offer Target</strong> is MAO minus a negotiation cushion (default 10%), giving you room to come up during negotiation.</p>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Adjust percentages in Settings based on your market and experience. Start conservative and adjust as you learn your local market.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">⚠️</span>Risk Factors</h2>
+
+    <p>The Risk Score (0-100) considers:</p>
+    <ul>
+      <li>Condition severity and running status</li>
+      <li>Hazard flags (no title, blown motor, frame damage)</li>
+      <li>Distance from you</li>
+      <li>Complexity of required work</li>
+      <li>Unknown factors</li>
+    </ul>
+
+    <h3>Hazard Flags</h3>
+    <ul>
+      <li><strong>NO_TITLE</strong> - Budget $150-300 for bonded title</li>
+      <li><strong>BLOWN_MOTOR</strong> - Major rebuild or swap needed</li>
+      <li><strong>FRAME_DAMAGE</strong> - Often a deal-breaker</li>
+      <li><strong>PARTS_MISSING</strong> - Factor in sourcing time & cost</li>
+      <li><strong>UNKNOWN_HISTORY</strong> - Inspect thoroughly</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">📈</span>Sales Velocity</h2>
+
+    <p>Velocity scores indicate how fast units typically sell:</p>
+    <ul>
+      <li><strong>A - Very Fast:</strong> Sport quads, youth ATVs, popular dirt bikes</li>
+      <li><strong>B - Normal:</strong> Standard utility ATVs, common models</li>
+      <li><strong>C - Slow:</strong> Older models, niche vehicles</li>
+      <li><strong>D - Very Slow:</strong> Overpriced, obscure brands</li>
+    </ul>
+
+    <div class="tip">
+      <strong>💡 Tip:</strong> Fast-selling categories let you turn capital faster. Consider velocity when you have limited capital.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">🔧</span>Parts & Builds</h2>
+
+    <p>Track parts needed for each project in <code>ATV_PARTS_NEEDED</code>:</p>
+    <ul>
+      <li>Link parts to specific ATV IDs</li>
+      <li>Track status: Needed → Sourcing → Ordered → Received → Installed</li>
+      <li>Parts costs roll up to update total project cost</li>
+    </ul>
+
+    <p>Use <code>ATV_BUILD_PLANS</code> to save templates for common builds like "Top End Rebuild" or "Full Resto".</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">🎯</span>Best Practices</h2>
+
+    <ul>
+      <li><strong>Run analysis daily</strong> when actively sourcing</li>
+      <li><strong>Act fast on HOT deals</strong> - they go quick</li>
+      <li><strong>Verify listings in person</strong> before committing</li>
+      <li><strong>Track actual results</strong> in POST_SALE_TRACKER to improve estimates</li>
+      <li><strong>Adjust settings</strong> based on your actual experience</li>
+      <li><strong>Focus on what you know</strong> - specialize in specific makes/models</li>
+    </ul>
+
+    <div class="tip">
+      <strong>💡 Pro Tip:</strong> Banshees, Raptors, and YFZ450s have strong resale markets. Youth ATVs sell fast but watch for hidden damage from crashes.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="emoji">🗂️</span>Sheet Reference</h2>
+
+    <h3>Import Sheets</h3>
+    <p><code>IMPORT_FB_ATV</code>, <code>IMPORT_CL_ATV</code>, <code>IMPORT_OU_ATV</code>, <code>IMPORT_EBAY_ATV</code>, <code>IMPORT_OTHER_ATV</code></p>
+
+    <h3>Analysis Sheets</h3>
+    <p><code>MASTER_ATV_DB</code> - Main database<br>
+    <code>ATV_VERDICT</code> - Ranked deals<br>
+    <code>ATV_MAO_ENGINE</code> - Offer calculations<br>
+    <code>ATV_LEAD_SCORE</code> - Score breakdowns</p>
+
+    <h3>Tracking Sheets</h3>
+    <p><code>ATV_PARTS_NEEDED</code> - Parts lists<br>
+    <code>ATV_BUILD_PLANS</code> - Build templates<br>
+    <code>POST_SALE_TRACKER</code> - Completed deals<br>
+    <code>LEADS_TRACKER_ATV</code> - Seller contacts</p>
+
+    <h3>System Sheets</h3>
+    <p><code>ATV_SETTINGS</code> - Configuration<br>
+    <code>ATV_DASHBOARD</code> - KPIs<br>
+    <code>ATV_SYSTEM_LOG</code> - Activity log</p>
+  </div>
+
+  <button class="close-btn" onclick="google.script.host.close()">Got It!</button>
+</body>
+</html>

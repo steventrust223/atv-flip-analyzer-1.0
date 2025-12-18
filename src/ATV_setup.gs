@@ -30,6 +30,9 @@ function onOpen() {
     .addItem('🎛️ Control Center', 'ATV_showControlCenter')
     .addItem('🧰 Deal Review Panel', 'ATV_showDealReview')
     .addSeparator()
+    .addItem('🔧 Admin Panel', 'ATV_showAdminPanel')
+    .addItem('🏥 System Health Check', 'ATV_showSystemHealthCheck')
+    .addSeparator()
     .addItem('⚙️ Settings', 'ATV_showSettings')
     .addItem('📚 Help / Overview', 'ATV_showHelp')
     .addToUi();

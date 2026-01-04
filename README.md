@@ -6,12 +6,13 @@ A risk-adjusted ROI analysis system built on Google Sheets + Apps Script that tu
 
 ## What This Is
 
-CarHawk is a **spreadsheet-based underwriting engine** that:
+CarHawk is a **spreadsheet-based underwriting engine** with a **professional HTML UI** that:
 - Identifies profitable asset acquisitions (ATVs, bikes, powersports)
 - Scores deals using risk-adjusted logic, not emotion
 - Automates Maximum Allowable Offer (MAO) calculations
 - Protects capital with downside floor analysis
 - Ranks opportunities by profit potential and safety
+- **NEW:** Beautiful visual dashboard and deal entry interfaces
 
 ## Core Philosophy
 
@@ -20,6 +21,21 @@ CarHawk is a **spreadsheet-based underwriting engine** that:
 3. **Capital tiers matter** (a $500 deal ≠ $5,000 deal)
 4. **Exit strategies defined BEFORE purchase**
 5. **Speed beats perfection** (fast filtering > deep analysis on bad deals)
+
+## 🎨 Visual Interface
+
+CarHawk includes 4 professional HTML interfaces:
+
+1. **📊 Dashboard** - Real-time stats, hot deals, quick actions
+2. **➕ Deal Entry** - One-click import, instant analysis
+3. **🏆 Verdicts** - Ranked deals with filters and color-coding
+4. **⚙️ Settings** - Visual configuration panel
+
+Access via: **🦅 CarHawk → Open Dashboard**
+
+See [UI_GUIDE.md](documentation/UI_GUIDE.md) for screenshots and workflows.
+
+---
 
 ## Quick Start
 
@@ -39,8 +55,17 @@ In Apps Script editor:
 
 ### 3. Start Analyzing
 
-**Source_Staging** → Add raw listings
-**Verdict** → See ranked BUY/WATCH/PASS decisions
+**Option A: Use the UI** (Recommended)
+1. Click **🦅 CarHawk → Open Dashboard**
+2. Click **➕ Add New Deal**
+3. Paste listing and click **Parse & Import**
+4. View instant verdict!
+
+**Option B: Use Sheets** (Advanced)
+1. Go to **Source_Staging** sheet
+2. Add raw listings manually
+3. Run **🦅 CarHawk → Update Verdicts**
+4. Check **Verdict** sheet for BUY/WATCH/PASS
 
 ---
 

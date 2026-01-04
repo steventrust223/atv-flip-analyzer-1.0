@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verdicts</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f7fa;
+      color: #2c3e50;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 5px;
+      padding: 15px 20px 0;
+      background: white;
+      border-bottom: 2px solid #e1e8ed;
+      position: sticky;
+      top: 80px;
+      z-index: 99;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      color: #95a5a6;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .tab.active {
+      color: #2c3e50;
+      border-bottom-color: #f2994a;
+    }
+
+    .tab:hover {
+      color: #2c3e50;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .deal-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 4px solid #e1e8ed;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .deal-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .deal-card.buy {
+      border-left-color: #38ef7d;
+    }
+
+    .deal-card.watch {
+      border-left-color: #f2c94c;
+    }
+
+    .deal-card.pass {
+      border-left-color: #eb3349;
+    }
+
+    .deal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 15px;
+    }
+
+    .deal-rank {
+      background: #667eea;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .deal-title {
+      flex: 1;
+      margin: 0 15px;
+    }
+
+    .deal-title h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .deal-condition {
+      font-size: 12px;
+      color: #95a5a6;
+    }
+
+    .verdict-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .verdict-badge.buy {
+      background: #d4fce3;
+      color: #11998e;
+    }
+
+    .verdict-badge.watch {
+      background: #fff4d4;
+      color: #f2994a;
+    }
+
+    .verdict-badge.pass {
+      background: #ffe0e0;
+      color: #eb3349;
+    }
+
+    .deal-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .metric {
+      background: #f8f9ff;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: #95a5a6;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+
+    .metric-value {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .metric-value.positive {
+      color: #11998e;
+    }
+
+    .metric-value.negative {
+      color: #eb3349;
+    }
+
+    .deal-action {
+      background: #667eea;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .deal-action.buy {
+      background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .deal-action.watch {
+      background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+    }
+
+    .deal-stats-row {
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      color: #5a6c7d;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e1e8ed;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #f2994a;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #95a5a6;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      opacity: 0.3;
+    }
+
+    .btn-refresh {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-refresh:hover {
+      transform: scale(1.1);
+    }
+
+    .btn-refresh:active {
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🏆 Deal Verdicts</h1>
+    <p>Ranked investment decisions</p>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="tab active" data-filter="all" onclick="filterDeals('all')">All</button>
+    <button class="tab" data-filter="buy" onclick="filterDeals('buy')">BUY</button>
+    <button class="tab" data-filter="watch" onclick="filterDeals('watch')">WATCH</button>
+    <button class="tab" data-filter="pass" onclick="filterDeals('pass')">PASS</button>
+  </div>
+
+  <div class="container">
+    <div id="dealsContainer">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading verdicts...</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn-refresh" onclick="refreshVerdicts()" title="Refresh">🔄</button>
+
+  <script>
+    let allDeals = [];
+    let currentFilter = 'all';
+
+    window.onload = function() {
+      loadVerdicts();
+    };
+
+    function loadVerdicts() {
+      google.script.run
+        .withSuccessHandler(displayVerdicts)
+        .withFailureHandler(handleError)
+        .getVerdictsData();
+    }
+
+    function displayVerdicts(data) {
+      allDeals = data.deals || [];
+      renderDeals();
+    }
+
+    function renderDeals() {
+      const container = document.getElementById('dealsContainer');
+
+      const filteredDeals = currentFilter === 'all'
+        ? allDeals
+        : allDeals.filter(d => d.verdict.toLowerCase() === currentFilter);
+
+      if (filteredDeals.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <p>No ${currentFilter === 'all' ? '' : currentFilter.toUpperCase() + ' '}deals found</p>
+          </div>
+        `;
+        return;
+      }
+
+      const dealsHTML = filteredDeals.map(deal => `
+        <div class="deal-card ${deal.verdict.toLowerCase()}" onclick="viewDeal('${deal.assetId}')">
+          <div class="deal-header">
+            <div class="deal-rank">${deal.rank}</div>
+            <div class="deal-title">
+              <h3>${deal.description}</h3>
+              <div class="deal-condition">${deal.condition} • ${deal.location}</div>
+            </div>
+            <div class="verdict-badge ${deal.verdict.toLowerCase()}">${deal.verdict}</div>
+          </div>
+
+          <div class="deal-metrics">
+            <div class="metric">
+              <div class="metric-label">Asking Price</div>
+              <div class="metric-value">$${formatNumber(deal.askingPrice)}</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Your MAO</div>
+              <div class="metric-value">$${formatNumber(deal.mao)}</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">Expected Profit</div>
+              <div class="metric-value positive">$${formatNumber(deal.profit)}</div>
+            </div>
+            <div class="metric">
+              <div class="metric-label">ROI</div>
+              <div class="metric-value positive">${deal.roi}</div>
+            </div>
+          </div>
+
+          <div class="deal-action ${deal.verdict.toLowerCase()}">
+            ${deal.action}
+          </div>
+
+          <div class="deal-stats-row">
+            <span class="stat-item">⚠️ Risk: ${deal.risk}/10</span>
+            <span class="stat-item">📊 Confidence: ${deal.confidence}%</span>
+            <span class="stat-item">💎 Resale: $${formatNumber(deal.estResale)}</span>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = dealsHTML;
+    }
+
+    function filterDeals(filter) {
+      currentFilter = filter;
+
+      // Update tab styling
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.filter === filter) {
+          tab.classList.add('active');
+        }
+      });
+
+      renderDeals();
+    }
+
+    function refreshVerdicts() {
+      document.getElementById('dealsContainer').innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Refreshing...</p>
+        </div>
+      `;
+
+      google.script.run
+        .withSuccessHandler(function() {
+          loadVerdicts();
+        })
+        .updateVerdicts();
+    }
+
+    function viewDeal(assetId) {
+      google.script.run.viewDealDetails(assetId);
+    }
+
+    function formatNumber(num) {
+      if (!num) return '0';
+      return Math.round(num).toLocaleString();
+    }
+
+    function handleError(error) {
+      document.getElementById('dealsContainer').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">❌</div>
+          <p>Error loading verdicts</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

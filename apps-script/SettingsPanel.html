@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: #f5f7fa;
+      color: #2c3e50;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #2c3e50;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e1e8ed;
+    }
+
+    .setting-item {
+      margin-bottom: 20px;
+    }
+
+    .setting-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #2c3e50;
+      font-size: 14px;
+    }
+
+    .setting-hint {
+      display: block;
+      font-size: 12px;
+      color: #95a5a6;
+      margin-bottom: 8px;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e1e8ed;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .success-message {
+      background: #d4fce3;
+      color: #11998e;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      display: none;
+    }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .tier-card {
+      background: #f8f9ff;
+      padding: 15px;
+      border-radius: 8px;
+      border: 2px solid #e1e8ed;
+    }
+
+    .tier-name {
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .tier-range {
+      font-size: 11px;
+      color: #95a5a6;
+      margin-bottom: 10px;
+    }
+
+    .tier-profit {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .input-prefix {
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>⚙️ Settings</h1>
+    <p>Configure CarHawk system</p>
+  </div>
+
+  <div class="container">
+    <div id="successMessage" class="success-message"></div>
+
+    <div id="settingsContainer">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading settings...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSettings = {};
+
+    window.onload = function() {
+      loadSettings();
+    };
+
+    function loadSettings() {
+      google.script.run
+        .withSuccessHandler(displaySettings)
+        .withFailureHandler(handleError)
+        .getSettingsData();
+    }
+
+    function displaySettings(data) {
+      currentSettings = data.settings || [];
+
+      const container = document.getElementById('settingsContainer');
+
+      // Group settings by category
+      const generalSettings = currentSettings.filter(s =>
+        s.key.includes('Holding') || s.key.includes('Profit') || s.key.includes('ROI') || s.key.includes('Multiplier')
+      );
+
+      const tier1Settings = currentSettings.filter(s => s.key.includes('Tier1'));
+      const tier2Settings = currentSettings.filter(s => s.key.includes('Tier2'));
+      const tier3Settings = currentSettings.filter(s => s.key.includes('Tier3'));
+      const tier4Settings = currentSettings.filter(s => s.key.includes('Tier4'));
+      const tier5Settings = currentSettings.filter(s => s.key.includes('Tier5'));
+
+      const crmSettings = currentSettings.filter(s => s.key.includes('CRM'));
+
+      container.innerHTML = `
+        <!-- General Settings -->
+        <div class="section">
+          <div class="section-title">💰 General Settings</div>
+
+          ${generalSettings.map(s => `
+            <div class="setting-item">
+              <label class="setting-label">${formatLabel(s.key)}</label>
+              <span class="setting-hint">${getHint(s.key)}</span>
+              ${renderInput(s.key, s.value)}
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- Capital Tiers -->
+        <div class="section">
+          <div class="section-title">📊 Capital Tiers</div>
+
+          <div class="tier-grid">
+            <div class="tier-card">
+              <div class="tier-name">Tier 1</div>
+              <div class="tier-range">$0 - $500</div>
+              <div class="tier-profit">Min Profit: $${getValue('Tier1_Min_Profit')}</div>
+            </div>
+            <div class="tier-card">
+              <div class="tier-name">Tier 2</div>
+              <div class="tier-range">$500 - $1,500</div>
+              <div class="tier-profit">Min Profit: $${getValue('Tier2_Min_Profit')}</div>
+            </div>
+            <div class="tier-card">
+              <div class="tier-name">Tier 3</div>
+              <div class="tier-range">$1,500 - $3,500</div>
+              <div class="tier-profit">Min Profit: $${getValue('Tier3_Min_Profit')}</div>
+            </div>
+            <div class="tier-card">
+              <div class="tier-name">Tier 4</div>
+              <div class="tier-range">$3,500 - $7,500</div>
+              <div class="tier-profit">Min Profit: $${getValue('Tier4_Min_Profit')}</div>
+            </div>
+          </div>
+
+          ${[...tier1Settings, ...tier2Settings, ...tier3Settings, ...tier4Settings, ...tier5Settings].map(s => `
+            <div class="setting-item" style="margin-top: 15px;">
+              <label class="setting-label">${formatLabel(s.key)}</label>
+              ${renderInput(s.key, s.value)}
+            </div>
+          `).join('')}
+        </div>
+
+        <!-- CRM Settings -->
+        ${crmSettings.length > 0 ? `
+        <div class="section">
+          <div class="section-title">🔗 CRM Integration</div>
+          ${crmSettings.map(s => `
+            <div class="setting-item">
+              <label class="setting-label">${formatLabel(s.key)}</label>
+              <span class="setting-hint">${getHint(s.key)}</span>
+              ${renderInput(s.key, s.value)}
+            </div>
+          `).join('')}
+        </div>
+        ` : ''}
+
+        <button class="btn" onclick="saveAllSettings()">
+          💾 Save All Settings
+        </button>
+      `;
+    }
+
+    function renderInput(key, value) {
+      const type = typeof value === 'boolean' ? 'checkbox' :
+                   typeof value === 'number' ? 'number' :
+                   'text';
+
+      if (key.includes('URL') || key.includes('Webhook')) {
+        return `<input type="text" id="${key}" value="${value || ''}" placeholder="https://..." style="font-size: 12px;">`;
+      }
+
+      if (type === 'number') {
+        const step = key.includes('Profit') ? '50' : '1';
+        return `
+          <div class="input-group">
+            <span class="input-prefix">$</span>
+            <input type="number" id="${key}" value="${value || 0}" step="${step}">
+          </div>
+        `;
+      }
+
+      if (type === 'checkbox') {
+        return `<input type="checkbox" id="${key}" ${value ? 'checked' : ''}>`;
+      }
+
+      return `<input type="text" id="${key}" value="${value || ''}">`;
+    }
+
+    function formatLabel(key) {
+      return key
+        .replace(/_/g, ' ')
+        .replace(/([A-Z])/g, ' $1')
+        .trim();
+    }
+
+    function getHint(key) {
+      const hints = {
+        'Daily_Holding_Cost': 'Cost per day to hold inventory',
+        'Default_Profit_Margin': 'Target profit percentage (0.25 = 25%)',
+        'Min_ROI_Threshold': 'Minimum acceptable ROI percentage',
+        'Market_Multiplier': 'Adjust for local market (1.0 = national avg)',
+        'CRM_Webhook_URL': 'Your CRM webhook endpoint',
+        'CRM_Auto_Sync': 'Automatically sync BUY deals to CRM'
+      };
+      return hints[key] || '';
+    }
+
+    function getValue(key) {
+      const setting = currentSettings.find(s => s.key === key);
+      return setting ? setting.value : 0;
+    }
+
+    function saveAllSettings() {
+      const updates = [];
+
+      currentSettings.forEach(setting => {
+        const input = document.getElementById(setting.key);
+        if (input) {
+          let newValue;
+          if (input.type === 'checkbox') {
+            newValue = input.checked;
+          } else if (input.type === 'number') {
+            newValue = parseFloat(input.value);
+          } else {
+            newValue = input.value;
+          }
+
+          if (newValue !== setting.value) {
+            updates.push({ key: setting.key, value: newValue });
+          }
+        }
+      });
+
+      if (updates.length === 0) {
+        showSuccess('No changes to save');
+        return;
+      }
+
+      saveSettings(updates);
+    }
+
+    function saveSettings(updates) {
+      let completed = 0;
+
+      updates.forEach(update => {
+        google.script.run
+          .withSuccessHandler(function() {
+            completed++;
+            if (completed === updates.length) {
+              showSuccess(`✅ Saved ${updates.length} settings`);
+              setTimeout(() => loadSettings(), 1000);
+            }
+          })
+          .withFailureHandler(handleError)
+          .updateSetting(update.key, update.value);
+      });
+    }
+
+    function showSuccess(message) {
+      const msg = document.getElementById('successMessage');
+      msg.textContent = message;
+      msg.style.display = 'block';
+
+      setTimeout(() => {
+        msg.style.display = 'none';
+      }, 3000);
+    }
+
+    function handleError(error) {
+      alert('Error: ' + error.message);
+    }
+  </script>
+</body>
+</html>

@@ -205,7 +205,7 @@ function calculateHoldingCost(deal) {
  * Smaller deals need smaller % profit but still worthwhile
  */
 function calculateDesiredProfit(deal, estimatedResale) {
-  const tier = deal.capitalTier || determinCapitalTier(deal.askingPrice);
+  const tier = deal.capitalTier || determineCapitalTier(deal.askingPrice);
 
   // Get tier-specific profit targets from Capital_Tiers sheet
   const tierConfig = getTierConfig(tier);

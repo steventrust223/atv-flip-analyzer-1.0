@@ -306,6 +306,15 @@ function createDealObjectFromRow(row) {
     titleStatus: row[17],
     hasEngine: row[18],
     hasWheels: row[19],
-    notes: row[20]
+    notes: row[20],
+    sourceUrl: row[21],
+    sourcePlatform: row[22],
+    location: row[23],
+    sellerContact: row[24],
+    dateFound: row[25],
+    dateAdded: row[26],
+    dateContacted: row[27],
+    datePurchased: row[28],
+    status: row[29]
   };
 }
